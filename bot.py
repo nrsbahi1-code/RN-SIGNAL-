@@ -1,18 +1,18 @@
 import io
 import os
-from google import genai
+import google.generativeai as genai
 from PIL import Image
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-# আপনার টেলিগ্রাম বট টোকেন
+# ১. টেলিগ্রাম বট টোকেন
 TELEGRAM_BOT_TOKEN = "8984060917:AAGIHC3chsxZLVIJKFFpCb7QbPlySWNucC0"
 
-# আপনার জেমিনি API Key (বসান হয়েছে)
+# ২. Gemini API Key
 GEMINI_API_KEY = "AQ.Ab8RN6JyjO-oDUcehq9WoGTLNQBHNRt40avDRPCHmt0R4B0sVA"
 
-# Gemini Client সেটআপ
-client = genai.Client(api_key=GEMINI_API_KEY)
+# Gemini API কনফিগারেশন (সঠিক পদ্ধতি)
+genai.configure(api_key=GEMINI_API_KEY)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("হ্যালো! ক্যান্ডেলস্টিক চার্টের একটি ছবি পাঠান, আমি অ্যানালাইসিস করে সিগন্যাল দিচ্ছি।")
@@ -35,11 +35,9 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Please provide the response in clear and professional Bangla language."
         )
 
-        # Gemini AI দিয়ে বিশ্লেষণ
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=[image, prompt]
-        )
+        # Gemini 1.5 Flash মডেল নির্বাচন
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content([image, prompt])
 
         # ফলাফল পাঠানো
         await update.message.reply_text(response.text)
