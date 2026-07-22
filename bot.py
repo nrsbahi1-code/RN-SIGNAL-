@@ -40,9 +40,11 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         
         # Gemini AI দিয়ে বিশ্লেষণ
-        response = client.models.generate_content(
-            model='gemini-flash',
-            contents=[image, prompt]
+response = client.models.generate_content(
+    model='gemini-1.5-flash',
+    contents=[image, prompt]
+)
+
         )
         
         # ফলাফল পাঠানো
